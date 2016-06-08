@@ -32,3 +32,8 @@ mdl.y		- Bison (yacc) source file. Bison will use this file to
 
 Makefile	- The project Makefile
 
+How to run:
+
+make
+./mdl swimmer.mdl
+animate anim/*
