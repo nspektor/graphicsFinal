@@ -69,10 +69,164 @@ void draw_polygons( struct matrix *polygons, screen s, color c ) {
 		 polygons->m[0][i],
 		 polygons->m[1][i],
 		 s, c);
+    scanline_convert( polygons->m[0][i],  polygons->m[1][i],
+		polygons->m[0][i+1],polygons->m[1][i+1],
+		polygons->m[0][i+2],polygons->m[1][i+2],
+		s,  c );
     }
   }
 }
 
+
+ 
+/*====== void scanline_convert() ======
+Inputs:   x and y points
+          screen s
+          color c  
+Returns: 
+Draws lines to color in the polygons
+
+loren and nellie
+june 8 2016
+===================*/
+void scanline_convert( double x0, double y0,
+		double x1, double y1,
+		double x2, double y2, screen s, color c ) {
+	double xt, xm, xb, yt, ym, yb, xL, xR, yL, yR;
+	double d0, d1;
+	//for funsies
+	c.blue = rand()%255;
+	c.green = rand()%255;
+	c.red = rand()%255;
+	//order the points
+
+	//true ordered middle 
+	//y0 is top
+	if(y0 > y1 && y0 > y2){
+		if (y1 >= y2){
+			//y0 > y1 > y2
+			yt = y0; xt = x0; //top
+			ym = y1; xm = x1; //mid
+			yb = y2; xb = x2; //bot
+		}
+		else{
+			//y0 > y2 > y1
+			yt = y0; xt = x0; //top
+			ym = y2; xm = x2; //mid
+			yb = y1; xb = x1; //bot
+		}
+	}
+	//y1 is top
+	else if(y1 > y0 && y1 > y2){
+		if (y0 >= y2){
+			//y1 > y0 > y2
+			yt = y1; xt = x1; //top
+			ym = y0; xm = x0; //mid
+			yb = y2; xb = x2; //bot
+		}
+		else{
+			//y1 > y2 > y0
+			yt = y1; xt = x1; //top
+			ym = y2; xm = x2; //mid
+			yb = y0; xb = x0; //bot
+		}
+	}
+	//y2 is top
+	else if(y2 > y0 && y2 > y1){
+		if (y0 >= y2){
+			//y2 > y0 > y1
+			yt = y2; xt = x2; //top
+			ym = y0; xm = x0; //mid
+			yb = y1; xb = x1; //bot
+		}
+		else{
+			//y2 > y1 > y0
+			yt = y2; xt = x2; //top
+			ym = y1; xm = x1; //mid
+			yb = y0; xb = x0; //bot
+		}
+	}
+	//last else means whatever is top equals something else, there is no top!!!
+	else if(y0 == y1){
+		//top == mid
+		yt = y0; xt = x0; //top
+		ym = y1; xm = x1; //mid
+		yb = y2; xb = x2; //bot
+	}
+	else {
+		//y1 == y2, and theyre top. no other explanation
+		yt = y2; xt = x2; //top
+		ym = y1; xm = x1; //mid
+		yb = y0; xb = x0; //bot
+	}
+
+	//now to draw
+	//perfect order
+	if (yt > ym && ym > yb){
+		d0 = (double)((double)(xt-xb) / (double)(yt - yb));
+		d1 = (double)((double)(xm-xb) / (double)(ym - yb)); 
+		yl = yb; xl = xb; //set left point to bottom 
+		yr = yb; xr = xb; //and also the right point
+		while (yl < ym){
+			raw_line( xl, yl, xr, yr, s, c );
+			xl += .01;
+			yl += d0 * .01;
+			xr += .01;
+			yr += d1 * .01;
+		}
+
+	}
+
+	//f*ck dem floatin doubles
+	yt = (float)yt;
+	xt = (float)xt;
+	ym = (float)ym;
+	xm = (float)xm;
+	yb = (float)yb;
+	xb = (float)xb;
+
+	//get dem deltas
+	if ( (double)(yt - yb) > .001){
+		d0 = (double)((double)(xt-xb) / (double)(yt - yb));
+	} else {
+		d0 = xt-xb;
+	}
+
+	if ( (double)(ym - yb) > .001){
+		d1 = (double)((double)(xm-xb) / (double)(ym - yb)); 
+	} else {
+		d1 = xm-xb;  
+	}
+
+	// d0 is 0, d1 is -inf
+	if (d1 > 999 || d1 < -999){
+	d1 = xm-xb;
+	}
+	if (d0 > 999 || d0 < -999){
+	d0 = xt-xb;
+	}
+
+	//draw dem lines
+	xR = xb; xL = xb;
+	draw_line( xL, yb, xR, yb, s, c );
+
+	while ( yb <= ym ){
+		xL += d0;
+		xR += d1;
+		yb += 1;
+		draw_line( xL, yb, xR, yb, s, c );
+	}
+
+	d1 = ( ( xt - xm ) / ( yt - ym ) );
+	while ( ym < yt ){
+		xL += d0;
+		xR += d1;
+		ym += 1;
+		draw_line( xL, ym, xR, ym, s, c );
+	}
+
+	draw_line( xL, yt, xR, yt, s, c );
+}
 
 /*======== void add_sphere() ==========
   Inputs:   struct matrix * points
