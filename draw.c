@@ -1064,7 +1064,11 @@ triangles
 ====================*/
 void Zdraw_polygons( struct matrix *polygons, screen s, color c , struct matrix* zbuffer) {
 	c.red=100;
-	scanline_convert(polygons,s,c);
+	// scanline_convert( polygons->m[0][i],  polygons->m[1][i],
+	// 	polygons->m[0][i+1],polygons->m[1][i+1],
+	// 	polygons->m[0][i+2],polygons->m[1][i+2],
+	// 	s,  c );
+	draw_polygons(polygons, s, c);
 	c.red=255;
 	int i;
 	for( i=0; i < polygons->lastcol-2; i+=3 ) {

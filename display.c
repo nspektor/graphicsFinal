@@ -11,9 +11,11 @@ for red, green and blue respectively
 #include <unistd.h>
 
 #include "ml6.h"
+#include "draw.h"
 #include "display.h"
 #include "matrix.h"
-
+#include "gmath.h"
+	
 color change_color( int i ) {
 
   color c;
