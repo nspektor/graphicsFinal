@@ -242,9 +242,9 @@ void scanline_convert( double x0, double y0,
 			draw_line( xL, yb, xR, yb, s, c );
 		}
 	}
-	else if (yt == ym && ym == yb){
-		//why
-	}
+	// else if (yt == ym && ym == yb){
+	// 	//why
+	// }
 	else {
 		//draw dem lines
 		xR = xb; xL = xb;
