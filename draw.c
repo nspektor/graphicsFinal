@@ -200,7 +200,7 @@ void scanline_convert( double x0, double y0,
 		d1 = xm-xb;
 	}
 
-	// d0 is 0, d1 is -inf
+	// they shouldnt ever be this extreme i feel like
 	if (d1 > 999 || d1 < -999){
 	d1 = xm-xb;
 	}
@@ -210,6 +210,7 @@ void scanline_convert( double x0, double y0,
 
 	printf("yt %f ym %f yb %f\n", yt, ym, yb);
 	if (yt - ym < 1){
+		//these are a problem when very small but not later
 		printf("triggered\n");
 		c.blue = 255;
 		c.green = 255;
@@ -229,6 +230,8 @@ void scanline_convert( double x0, double y0,
 		//can i just turn this off
 		//do i reaaaally need these triangles? ?
 		printf("d0 %f d1 %f\n", d0, d1);
+		d1 = 0;
+		d0 = 0;
 		while (yb <= yt){
 			c.blue = 0;
 			c.green = 255;
