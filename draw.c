@@ -95,7 +95,7 @@ void scanline_convert( double x0, double y0,
 	double xt, xm, xb, yt, ym, yb, xL, xR, yL, yR;
 	double d0, d1;
 	//for funsies
-	c.blue = rand()%255;
+	c.blue = 150;
 	c.green = rand()%255;
 	c.red = rand()%255;
 	//order the points
@@ -161,21 +161,22 @@ void scanline_convert( double x0, double y0,
 	}
 
 	//now to draw
-	//perfect order
-	if (yt > ym && ym > yb){
-		d0 = (double)((double)(xt-xb) / (double)(yt - yb));
-		d1 = (double)((double)(xm-xb) / (double)(ym - yb));
-		yl = yb; xl = xb; //set left point to bottom
-		yr = yb; xr = xb; //and also the right point
-		while (yl < ym){
-			raw_line( xl, yl, xr, yr, s, c );
-			xl += .01;
-			yl += d0 * .01;
-			xr += .01;
-			yr += d1 * .01;
-		}
 
-	}
+	//perfect order
+	// if (yt > ym && ym > yb){
+	// 	d0 = (double)((double)(xt-xb) / (double)(yt - yb));
+	// 	d1 = (double)((double)(xm-xb) / (double)(ym - yb));
+	// 	yl = yb; xl = xb; //set left point to bottom
+	// 	yr = yb; xr = xb; //and also the right point
+	// 	while (yl < ym){
+	// 		raw_line( xl, yl, xr, yr, s, c );
+	// 		xl += .01;
+	// 		yl += d0 * .01;
+	// 		xr += .01;
+	// 		yr += d1 * .01;
+	// 	}
+
+	// }
 
 	//f*ck dem floatin doubles
 	yt = (float)yt;
@@ -184,6 +185,7 @@ void scanline_convert( double x0, double y0,
 	xm = (float)xm;
 	yb = (float)yb;
 	xb = (float)xb;
+
 
 	//get dem deltas
 	if ( (double)(yt - yb) > .001){
@@ -198,7 +200,7 @@ void scanline_convert( double x0, double y0,
 		d1 = xm-xb;
 	}
 
-	// d0 is 0, d1 is -inf
+	// they shouldnt ever be this extreme i feel like
 	if (d1 > 999 || d1 < -999){
 	d1 = xm-xb;
 	}
@@ -206,26 +208,63 @@ void scanline_convert( double x0, double y0,
 	d0 = xt-xb;
 	}
 
-	//draw dem lines
-	xR = xb; xL = xb;
-	draw_line( xL, yb, xR, yb, s, c );
-
-	while ( yb <= ym ){
-		xL += d0;
-		xR += d1;
-		yb += 1;
+	printf("yt %f ym %f yb %f\n", yt, ym, yb);
+	if (yt - ym < 1){
+		//these are a problem when very small but not later
+		printf("triggered\n");
+		c.blue = 255;
+		c.green = 255;
+		c.red = 255;
+		//i feel like the problems are here
+		xR = xb; xL = xb;
+		while (yb <= yt){
+			xL += d0;
+			xR += d1;
+			yb += 1;
+			draw_line( xL, yb, xR, yb, s, c );
+		}
+	}
+	else if (ym - yb < 1){
+		xL = xb; xR = xm;
+		//all of my problems are here
+		//can i just turn this off
+		//do i reaaaally need these triangles? ?
+		printf("d0 %f d1 %f\n", d0, d1);
+		d1 = 0;
+		d0 = 0;
+		while (yb <= yt){
+			c.blue = 0;
+			c.green = 255;
+			c.red = 255;
+			xL += d0;
+			xR += d1;
+			yb += 1;
+			draw_line( xL, yb, xR, yb, s, c );
+		}
+	}
+	else if (yt == ym && ym == yb){
+		//why
+	}
+	else {
+		//draw dem lines
+		xR = xb; xL = xb;
 		draw_line( xL, yb, xR, yb, s, c );
-	}
 
-	d1 = ( ( xt - xm ) / ( yt - ym ) );
-	while ( ym < yt ){
-		xL += d0;
-		xR += d1;
-		ym += 1;
-		draw_line( xL, ym, xR, ym, s, c );
-	}
+		while ( yb <= ym ){
+			xL += d0;
+			xR += d1;
+			yb += 1;
+			draw_line( xL, yb, xR, yb, s, c );
+		}
 
-	draw_line( xL, yt, xR, yt, s, c );
+		d1 = ( ( xt - xm ) / ( yt - ym ) );
+		while ( ym < yt ){
+			xL += d0;
+			xR += d1;
+			ym += 1;
+			draw_line( xL, ym, xR, ym, s, c );
+		}
+	}
 }
 
 /*======== void add_sphere() ==========
