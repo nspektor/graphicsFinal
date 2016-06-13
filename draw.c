@@ -931,7 +931,7 @@ void Zdraw_line(int x0, int y0, double z0,int x1, int y1, double z1,screen s, co
 		  increment = (z1 - z)/steps;
 		  while ( x <= x1 ) {
 			  Zplot(s, c, x, y, z,zbuffer);
-			  z+=increment
+			  z+=increment;
 			  if ( d < 0 ) {
 				  x = x + 1;
 				  d = d + dy;
