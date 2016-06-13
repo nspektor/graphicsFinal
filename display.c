@@ -81,7 +81,31 @@ void plot( screen s, color c, int x, int y) {
   if ( x >= 0 && x < XRES && newy >=0 && newy < YRES )
     s[x][newy] = c;
 }
+/*======== void Zplot() ==========
+Inputs:  screen s
+         color c
+         int x
+         int y
+         struct matrix *zbuffer
+Returns:
+Sets the color at pixel x, y to the color represented by c
+Note that s[0][0] will be the upper left hand corner
+of the screen.
+If you wish to change this behavior, you can change the indicies
+of s that get set. For example, using s[x][YRES-1-y] will have
+pixel 0, 0 located at the lower left corner of the screen
+====================*/
+void Zplot( screen s, color c, int x, int y, double z, struct matrix * zbuffer){
+  int newy = YRES - 1 - y;
+  if(x >= 0 && x < XRES && newy >=0 && newy < YRES && z > zbuffer->m[x][newy]){
+    printf("%s%g\n","plotting",z);
+    printf("%g\n",zbuffer->m[x][newy]);
+    zbuffer->m[x][newy] = z;
+    printf("%g\n",zbuffer->m[x][newy]);
+    s[x][newy] = c;
+  }
 
+}
 /*======== void clear_screen() ==========
 Inputs:   screen s
 Returns:

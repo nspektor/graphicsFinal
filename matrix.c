@@ -43,24 +43,27 @@ m->m[r][c]=something;
 if (m->lastcol)...
 */
 struct matrix *new_Zmatrix(int rows, int cols) {
-    double **tmp;
-    int i;
-    struct matrix *m;
+  double **tmp;
+  int i;
+  int a; int b;
+  struct matrix *m;
 
-    tmp = (double **)malloc(rows * sizeof(double *));
-    for (i=0;i<rows;i++) {
-        tmp[i]=(double *)malloc(cols * sizeof(double));
-        -      tmp[i]= -DBL_MAX;
-        +      tmp[i]= LONG_MIN;
+  tmp = (double **)malloc(rows * sizeof(double *));
+  for (i=0;i<rows;i++) {
+      tmp[i]=(double *)malloc(cols * sizeof(double));
+  }
+
+  m=(struct matrix *)malloc(sizeof(struct matrix));
+  m->m=tmp;
+  m->rows = rows;
+  m->cols = cols;
+  m->lastcol = 0;
+  for(a = 0;a < rows; a ++){
+    for(b = 0;b < rows; b ++){
+      m->m[a][b] = -1;
     }
-
-    m=(struct matrix *)malloc(sizeof(struct matrix));
-    m->m=tmp;
-    m->rows = rows;
-    m->cols = cols;
-    m->lastcol = 0;
-
-    return m;
+  }
+  return m;
 }
 
 /*-------------- void free_matrix() --------------
