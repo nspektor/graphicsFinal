@@ -95,9 +95,10 @@ void scanline_convert( double x0, double y0,
 	double xt, xm, xb, yt, ym, yb, xL, xR, yL, yR;
 	double d0, d1;
 	//for funsies
-	c.blue = 150;
-	c.green = rand()%255;
-	c.red = rand()%255;
+	//
+	c.blue = 239;
+	c.green = 25 + rand()%100;
+	c.red = 100 + rand()%55;
 	//order the points
 
 	//true ordered middle

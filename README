@@ -1,4 +1,13 @@
-Files
+#Features Implemented
+-Shapes
+-Animation
+-ZBuffering
+-Backface Culling
+-ScanLine Conversion
+-Disco Shading 
+
+
+#Files
 -----
 README 		- this file.
 
@@ -32,7 +41,7 @@ mdl.y		- Bison (yacc) source file. Bison will use this file to
 
 Makefile	- The project Makefile
 
-How to run:
+#How to run:
 
 make
 ./mdl swimmer.mdl
