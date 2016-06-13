@@ -162,21 +162,6 @@ void scanline_convert( double x0, double y0,
 
 	//now to draw
 
-	//perfect order
-	// if (yt > ym && ym > yb){
-	// 	d0 = (double)((double)(xt-xb) / (double)(yt - yb));
-	// 	d1 = (double)((double)(xm-xb) / (double)(ym - yb));
-	// 	yl = yb; xl = xb; //set left point to bottom
-	// 	yr = yb; xr = xb; //and also the right point
-	// 	while (yl < ym){
-	// 		raw_line( xl, yl, xr, yr, s, c );
-	// 		xl += .01;
-	// 		yl += d0 * .01;
-	// 		xr += .01;
-	// 		yr += d1 * .01;
-	// 	}
-
-	// }
 
 	//f*ck dem floatin doubles
 	yt = (float)yt;
@@ -208,13 +193,13 @@ void scanline_convert( double x0, double y0,
 	d0 = xt-xb;
 	}
 
-	printf("yt %f ym %f yb %f\n", yt, ym, yb);
+	//printf("yt %f ym %f yb %f\n", yt, ym, yb);
 	if (yt - ym < 1){
 		//these are a problem when very small but not later
-		printf("triggered\n");
-		c.blue = 255;
-		c.green = 255;
-		c.red = 255;
+		// printf("triggered\n");
+		// c.blue = 255;
+		// c.green = 255;
+		// c.red = 255;
 		//i feel like the problems are here
 		xR = xb; xL = xb;
 		while (yb <= yt){
@@ -229,13 +214,14 @@ void scanline_convert( double x0, double y0,
 		//all of my problems are here
 		//can i just turn this off
 		//do i reaaaally need these triangles? ?
-		printf("d0 %f d1 %f\n", d0, d1);
+		//printf("d0 %f d1 %f\n", d0, d1);
 		d1 = 0;
 		d0 = 0;
 		while (yb <= yt){
-			c.blue = 0;
-			c.green = 255;
-			c.red = 255;
+			//make the bad ones banana yellow
+			// c.blue = 0;
+			// c.green = 255;
+			// c.red = 255;
 			xL += d0;
 			xR += d1;
 			yb += 1;
